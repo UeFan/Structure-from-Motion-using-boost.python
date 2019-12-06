@@ -1,0 +1,27 @@
+# Copyright Stefan Seefeld 2016.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import python ;
+
+lib boost_numpy
+  :
+  : <search>/usr/local/Boost/lib
+    <include>/usr/local/Boost/include
+    ;
+
+project boost
+  : requirements
+    <include>/usr/local/Boost/include
+    <library>boost_numpy
+    <library>/usr/local/lib/libceres.dylib
+    <library>/usr/local/lib/libopencv_highgui.dylib
+    <library>/usr/local/lib/libopencv_core.dylib
+    <library>/usr/local/lib/libopencv_imgproc.dylib
+    <library>/usr/local/lib/libopencv_calib3d.dylib
+    <library>/usr/local/lib/libopencv_xfeatures2d.dylib
+    <location>.
+    ;
+
+python-extension BundleAdjustment : BA.cpp : <link>static ;
