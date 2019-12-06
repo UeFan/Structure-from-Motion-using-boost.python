@@ -135,18 +135,17 @@ def find_transform(K, p1, p2):
 
     R = None
     T = None
-    mask = None  # mask中大于零的点代表匹配点，等于零代表失配点
+    mask = None
     
     print ("K:{}".format(K))
-    # 根据内参矩阵获取相机的焦距和光心坐标（主点坐标）
+
     focal_length =  0.5*(K[0, 0] + K[1, 1])
     principle_point = (K[0, 2], K[1, 2])
 
-    # 根据匹配点求取本征矩阵，使用RANSAC，进一步排除失配点
+
     print ("before: p1:{},\n p2:{}\n, focal_l:{}, principle_point:{}, ran:{}".format(p1, p2, focal_length, principle_point, cv2.RANSAC))
     print ("-----------------")
 
-    # BundleAdjustment.FE([p1, p2, K])
     E, mask = cv2.findEssentialMat(p1, p2, focal_length, principle_point, method=cv2.RANSAC, prob=0.999, threshold=1.0)
     if E is None:
         raise Exception("E is None")
@@ -157,7 +156,7 @@ def find_transform(K, p1, p2):
     if (feasible_count < 5) or (feasible_count / len(mask)) < 0.4:
         raise Exception("too few inliers")
 
-    # 分解本征矩阵，获取相对变换
+
     pass_count, R, T, mask = cv2.recoverPose(E, p1, p2)
 
     # if (pass_count / feasible_count) < 0.5:
@@ -327,9 +326,6 @@ def init_structure(K, key_points_for_all, colors_for_all, matches_for_all):
 
 
 def main():
-    '''
-    最后两个函数还没写，所以不知道输入输出是啥。。。
-    '''
     data_path = "/Users/fanyue/Downloads/sfm_images/"
     img_names = os.listdir(data_path)
     file_names = []

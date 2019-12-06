@@ -143,9 +143,8 @@ BA::BA(py::list intrinsic, py::list extrinsic, py::list correspond_struct_idx, p
 
 
 Mat BA::ConvertNDArrayToMat(const np::ndarray& ndarr) {
-    //int length = ndarr.get_nd(); // get_nd() returns num of dimensions. this is used as a length, but we don't need to use in this case. because we know that image has 3 dimensions.
-    const Py_intptr_t* shape = ndarr.get_shape(); // get_shape() returns Py_intptr_t* which we can get the size of n-th dimension of the ndarray.
-//    char* dtype_str = py::extract<char *>(py::str(ndarr.get_dtype()));
+
+    const Py_intptr_t* shape = ndarr.get_shape();
 
     // variables for creating Mat object
     int rows = shape[0];
@@ -153,7 +152,7 @@ Mat BA::ConvertNDArrayToMat(const np::ndarray& ndarr) {
 //    int channel = shape[2];
 //    int depth;
 
-//    // you should find proper type for c++. in this case we use 'CV_8UC3' image, so we need to create 'uchar' type Mat.
+
 //    if (!strcmp(dtype_str, "uint8")) {
 //        depth = CV_8U;
 //    }
@@ -208,7 +207,7 @@ void BA::bundle_adjustment(
                 continue;
 
             Point2d observed = key_points[point_idx].pt;
-            // 模板参数中，第一个为代价函数的类型，第二个为代价的维度，剩下三个分别为代价函数第一第二还有第三个参数的维度
+
             ceres::CostFunction* cost_function = new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(new ReprojectCost(observed));
 
             problem.AddResidualBlock(
